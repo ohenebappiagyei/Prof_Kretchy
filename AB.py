@@ -2,6 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from statsmodels.stats.mediation import Mediation
+import numpy as np
+import seaborn as sns
 
 # Load the CSV file into a pandas DataFrame
 from pathlib import Path
