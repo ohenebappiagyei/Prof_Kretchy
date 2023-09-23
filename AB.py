@@ -1,19 +1,18 @@
+from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from statsmodels.stats.mediation import Mediation
-import numpy as np
 import seaborn as sns
 
-# Load the CSV file into a pandas DataFrame
-from pathlib import Path
-
+# build sub directory using BASE_DIRE / sub_dir
 BASE_DIR = Path(__file__).resolve().parent
+# print(f"BASE DIRECTORY: {BASE_DIR}")
+
+# Load the CSV file into a pandas DataFrame
 file_path = (BASE_DIR/"AB_data.csv")
-# c/Users/HP/Desktop/Prof_Kretchy
 df = pd.read_csv(file_path)
 
-# print(help(tree))
 # Define mappings for all columns
 age_mapping = {1: "18-29 years", 2: "30-39 years", 3: "40-49", 4: "50-59", 5: "60-69", 6: "70+"}
 sex_mapping = {1: "Male", 2: "Female"}
@@ -81,7 +80,7 @@ summary_stats = df.describe()
 
 # Data Visualization
 # Histogram for age distribution
-plt.hist(df['age'], bins=6, edgecolor='black')
+# plt.hist(df.get('age'), bins=6, edgecolor='black')
 plt.xlabel('Age')
 plt.ylabel('Frequency')
 plt.title('Age Distribution')
@@ -97,7 +96,7 @@ plt.show()
 
 # Pie chart for Religion Distribution
 plt.figure(figsize=(8, 8))
-df['religion'].value_counts().plot(kind=' pie', autopct='%1.1f%%')
+df['religion'].value_counts().plot(kind='pie', autopct='%1.1f%%')
 plt.title('Religion Distribution')
 plt.ylabel('')
 plt.show()
