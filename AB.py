@@ -1,12 +1,17 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
-from causalml.inference.mediation import Mediation
+from statsmodels.stats.mediation import Mediation
 
 # Load the CSV file into a pandas DataFrame
-file_path = c/Users/HP/Desktop/Prof_Kretchy
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+file_path = (BASE_DIR/"AB_data.csv")
+# c/Users/HP/Desktop/Prof_Kretchy
 df = pd.read_csv(file_path)
 
+# print(help(tree))
 # Define mappings for all columns
 age_mapping = {1: "18-29 years", 2: "30-39 years", 3: "40-49", 4: "50-59", 5: "60-69", 6: "70+"}
 sex_mapping = {1: "Male", 2: "Female"}
