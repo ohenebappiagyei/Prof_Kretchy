@@ -1,0 +1,31 @@
+Mediation Analysis Results:
+Direct Effect (c'): 0.419
+
+This represents the effect of the 'acceptancescore' (independent variable) on 'Qscore' (dependent variable) without considering the mediator 'perceptionscore'.
+Indirect Effect (a*b): 1.127
+
+This is the effect of 'acceptancescore' on 'Qscore' that is mediated through 'perceptionscore'. It's a significant indirect effect.
+Total Effect (c): 1.546
+
+This is the total effect of 'acceptancescore' on 'Qscore', considering both the direct and indirect effects.
+Mediated Effect (Indirect Effect): 1.127
+
+This is the mediated effect or the effect of 'acceptancescore' on 'Qscore' that is mediated through 'perceptionscore'.
+OLS Regression Results (Association Analysis):
+The association analysis shows the regression of 'Qscore' (dependent variable) on 'perceptionscore' and 'marscore' (independent variables).
+
+const (intercept): 0.500
+perceptionscore coef: 0.063
+For a one-unit increase in 'perceptionscore', 'Qscore' is expected to increase by approximately 0.063 units, holding 'marscore' constant.
+marscore coef: 0.641
+For a one-unit increase in 'marscore', 'Qscore' is expected to increase by approximately 0.641 units, holding 'perceptionscore' constant.
+Conclusion:
+In the mediation analysis, it's observed that a significant part of the effect of 'acceptancescore' on 'Qscore' is mediated through 'perceptionscore'. The indirect effect (a*b) is 1.127, indicating a substantial mediating effect. 
+This means that, more patients will have an improved quality of life if they adhere to their medicines and this is dependent on whether or not they accept their illness. For this reason, a lot more education and awareness should 
+be done to ensure patients accept their ailments.
+
+In the association analysis, both 'perceptionscore' and 'marscore' show a positive association with 'Qscore'. Specifically, an increase in 'perceptionscore' and 'marscore' is associated with an increase in 'Qscore'. This means that
+the perception patients have  about their illness as well as their medication adherence can worsen or improve their quality of life. It is thus very important to ensure all measures possible to improve the medication adherence and 
+perception is done.
+
+These results suggest that both perception and medication adherence are important to improve  on Quality of life, with perception playing a significant mediating role in this relationship.
