@@ -2,12 +2,11 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
-from statsmodels.stats.mediation import Mediation
+from mediation import Mediation
 import seaborn as sns
 
 # build sub directory using BASE_DIRE / sub_dir
 BASE_DIR = Path(__file__).resolve().parent
-# print(f"BASE DIRECTORY: {BASE_DIR}")
 
 # Load the CSV file into a pandas DataFrame
 file_path = (BASE_DIR/"AB_data.csv")
@@ -78,6 +77,7 @@ for col in f_columns:
 # Descriptive Statistics
 summary_stats = df.describe()
 
+
 # Data Visualization
 # Histogram for age distribution
 # plt.hist(df.get('age'), bins=6, edgecolor='black')
@@ -101,16 +101,18 @@ plt.title('Religion Distribution')
 plt.ylabel('')
 plt.show()
 
-# Box plot for age distribution by marital status
+# Count plot for marital status within each age group
 plt.figure(figsize=(10, 6))
-sns.boxplot(x='marital_status', y='age', data=df)
-plt.xlabel('Marital Status')
-plt.ylabel('Age')
-plt.title('Age Distribution by Marital Status')
+sns.countplot(x='age', hue='marital_status', data=df)
+plt.xlabel('Age Group')
+plt.ylabel('Count')
+plt.title('Marital Status Distribution within Each Age Group')
+plt.legend(title='Marital Status', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.show()
 
+
 # Select relevant columns for correlation heatmap
-correlation_data = df[['acceptance', 'perception', 'marscore', 'Qscore']]
+correlation_data = df[['acceptancescore', 'perceptionscore', 'marscore', 'Qscore']]
 
 # Calculate correlations
 corr_matrix = correlation_data.corr()
@@ -124,7 +126,14 @@ plt.show()
 
 # Stacked bar chart for comorbidity distribution by age group
 comorbidity_columns = ['B11_hyperlipedemia', 'B11_stroke', 'B11_hypertension', 'B11_heart_disease', 'B11_kidney_disease', 'B11_obesity']
+
+# Convert the values in the comorbidity columns to numeric (1 for 'Yes', 0 for 'No')
+for col in comorbidity_columns:
+    df[col] = df[col].map({'Yes': 1, 'No': 0})
+
 comorbidity_df = df.groupby('age')[comorbidity_columns].sum()
+
+# Plotting the stacked bar chart
 comorbidity_df.plot(kind='bar', stacked=True, figsize=(12, 8))
 plt.xlabel('Age Group')
 plt.ylabel('Count')
@@ -133,16 +142,12 @@ plt.legend(title='Comorbidity', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.show()
 
 
-# Define the mediation model using causalml
-mediation_model = Mediation(data=df, treatment='acceptance', mediator='marscore', outcome='perception')
-
-# Run the mediation analysis
-mediation_results = mediation_model.estimate_effect()
-mediation_summary = mediation_model.summary()
 
 
-# Display mediation results
-print(mediation_summary)
+# Mediation analysis
+mediation_model = Mediation(data=df, treatment='marscore', outcome='acceptancescore', mediator='perceptionscore')
+mediation_results = mediation_model.calculate(alpha=0.05, bootstrap=1000)
+print(mediation_results)
 
 # For the association analysis
 X = df[['perception', 'marscore']]
