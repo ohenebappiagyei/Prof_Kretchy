@@ -81,10 +81,10 @@ summary_stats = df.describe()
 # Data Visualization
 # Histogram for age distribution
 # plt.hist(df.get('age'), bins=6, edgecolor='black')
-plt.xlabel('Age')
-plt.ylabel('Frequency')
-plt.title('Age Distribution')
-plt.show()
+# plt.xlabel('Age')
+# plt.ylabel('Frequency')
+# plt.title('Age Distribution')
+# plt.show()
 
 # Bar chart for sex distribution
 plt.figure(figsize=(8, 6))
