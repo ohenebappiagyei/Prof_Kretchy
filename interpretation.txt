@@ -1,31 +1,22 @@
+Analysis of Comorbidities in Different Age Groups:
+
+In analyzing comorbidities across various age groups, it's evident that hypertension is the predominant disease across all ages. For individuals between 18-29 years, there are no significant comorbidities other than hypertension. However, as age increases, additional comorbidities emerge. In the 40-year age group, obesity becomes the most common comorbidity after hypertension, followed by hyperlipidemia and occasionally stroke. For those aged 50-59, hyperlipidemia is the only other significant comorbidity besides hypertension. In the 60-69 age group, hyperlipidemia, heart disease, and stroke show comparable prevalence. Finally, for those 70 and above, hyperlipidemia follows hypertension as the second most common comorbidity, trailed by stroke.
+
 Mediation Analysis Results:
-Direct Effect (c'): 0.419
 
-This represents the effect of the 'acceptancescore' (independent variable) on 'Qscore' (dependent variable) without considering the mediator 'perceptionscore'.
-Indirect Effect (a*b): 1.127
+In the mediation analysis, the direct effect (c') of 'acceptancescore' on 'Qscore' is 0.419, signifying the effect without considering the mediator 'perceptionscore'. The indirect effect (a*b) is 1.127, highlighting the effect mediated through 'perceptionscore', which is statistically significant. The total effect (c) amounts to 1.546, encompassing both direct and indirect effects. Specifically, the mediated effect (Indirect Effect) is 1.127, indicating a substantial impact of 'acceptancescore' on 'Qscore' mediated through 'perceptionscore'.
 
-This is the effect of 'acceptancescore' on 'Qscore' that is mediated through 'perceptionscore'. It's a significant indirect effect.
-Total Effect (c): 1.546
-
-This is the total effect of 'acceptancescore' on 'Qscore', considering both the direct and indirect effects.
-Mediated Effect (Indirect Effect): 1.127
-
-This is the mediated effect or the effect of 'acceptancescore' on 'Qscore' that is mediated through 'perceptionscore'.
 OLS Regression Results (Association Analysis):
-The association analysis shows the regression of 'Qscore' (dependent variable) on 'perceptionscore' and 'marscore' (independent variables).
 
-const (intercept): 0.500
-perceptionscore coef: 0.063
-For a one-unit increase in 'perceptionscore', 'Qscore' is expected to increase by approximately 0.063 units, holding 'marscore' constant.
-marscore coef: 0.641
-For a one-unit increase in 'marscore', 'Qscore' is expected to increase by approximately 0.641 units, holding 'perceptionscore' constant.
+The association analysis through Ordinary Least Squares (OLS) regression demonstrates the relationship between 'Qscore' (dependent variable) and 'perceptionscore' and 'marscore' (independent variables).
+
+The intercept (const) is 0.500.
+The coefficient for 'perceptionscore' is 0.063, suggesting that for every one-unit increase in 'perceptionscore', 'Qscore' is expected to increase by approximately 0.063 units, keeping 'marscore' constant.
+The coefficient for 'marscore' is 0.641, implying that for every one-unit increase in 'marscore', 'Qscore' is expected to increase by approximately 0.641 units, holding 'perceptionscore' constant.
 Conclusion:
-In the mediation analysis, it's observed that a significant part of the effect of 'acceptancescore' on 'Qscore' is mediated through 'perceptionscore'. The indirect effect (a*b) is 1.127, indicating a substantial mediating effect. 
-This means that, more patients will have an improved quality of life if they adhere to their medicines and this is dependent on whether or not they accept their illness. For this reason, a lot more education and awareness should 
-be done to ensure patients accept their ailments.
 
-In the association analysis, both 'perceptionscore' and 'marscore' show a positive association with 'Qscore'. Specifically, an increase in 'perceptionscore' and 'marscore' is associated with an increase in 'Qscore'. This means that
-the perception patients have  about their illness as well as their medication adherence can worsen or improve their quality of life. It is thus very important to ensure all measures possible to improve the medication adherence and 
-perception is done.
+The mediation analysis reveals a significant portion of the effect of 'acceptancescore' on 'Qscore' being mediated through 'perceptionscore', with a noteworthy indirect effect (a*b) of 1.127. This underscores the importance of patients accepting their illness, as it significantly influences their quality of life through medication adherence. Consequently, raising awareness and providing education to enhance acceptance of their ailments is crucial.
 
-These results suggest that both perception and medication adherence are important to improve  on Quality of life, with perception playing a significant mediating role in this relationship.
+In the association analysis, both 'perceptionscore' and 'marscore' exhibit a positive association with 'Qscore', indicating that improving patients' perception of their illness and adherence to medication can positively impact their quality of life. Hence, comprehensive efforts to enhance medication adherence and perception are vital.
+
+Overall, these findings underscore the pivotal role of both perception and medication adherence in enhancing quality of life, with perception playing a significant mediating role in this relationship.
