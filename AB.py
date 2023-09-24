@@ -2,7 +2,6 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
-from mediation import Mediation
 import seaborn as sns
 
 # build sub directory using BASE_DIRE / sub_dir
@@ -80,9 +79,9 @@ summary_stats = df.describe()
 
 # Data Visualization
 # Histogram for age distribution
-# plt.hist(df.get('age'), bins=6, edgecolor='black')
+# plt.hist(str(df['age']), bins=6, edgecolor='black')
 # plt.xlabel('Age')
-# plt.ylabel('Frequency')
+# # plt.ylabel('Frequency')
 # plt.title('Age Distribution')
 # plt.show()
 
@@ -145,12 +144,46 @@ plt.show()
 
 
 # Mediation analysis
-mediation_model = Mediation(data=df, treatment='marscore', outcome='acceptancescore', mediator='perceptionscore')
-mediation_results = mediation_model.calculate(alpha=0.05, bootstrap=1000)
-print(mediation_results)
+# print(help(Mediation))
+X = df[['acceptancescore']]
+M = df[['marscore']]
+Y = df[['perceptionscore']]
+# mediation_model = Mediation(data=df, treatment='marscore', outcome='acceptancescore', mediator='perceptionscore')
+# mediation_results = mediation_model.calculate(alpha=0.05, bootstrap=1000)
+# print(mediation_results)
+# Create a mediation model
+# Extract the relevant columns
+X = df['acceptancescore']
+M = df['marscore']
+Y = df['perceptionscore']
+
+# Step 1: Regress the mediator (M) on the independent variable (X)
+X = sm.add_constant(X)  # Add a constant term to the independent variable
+model_mediator = sm.OLS(M, X).fit()
+
+# Step 2: Regress the dependent variable (Y) on both the independent variable (X) and the mediator (M)
+X = df[['acceptancescore', 'marscore']]
+X = sm.add_constant(X)  # Add a constant term to the independent variables
+model_total = sm.OLS(Y, X).fit()
+
+# Step 3: Calculate the direct effect (c') and the indirect effect (a*b)
+c_prime = model_total.params['acceptancescore']
+a_b = model_mediator.params['acceptancescore'] * model_total.params['marscore']
+
+# Step 4: Calculate the total effect (c)
+c = c_prime + a_b
+
+# Step 5: Calculate the mediated effect (indirect effect) as the difference between the total effect (c) and the direct effect (c')
+mediated_effect = c - c_prime
+
+# Display the results
+print(f"Direct Effect (c'): {c_prime}")
+print(f"Indirect Effect (a*b): {a_b}")
+print(f"Total Effect (c): {c}")
+print(f"Mediated Effect (Indirect Effect): {mediated_effect}")
 
 # For the association analysis
-X = df[['perception', 'marscore']]
+X = df[['perceptionscore', 'marscore']]
 y = df['Qscore']
 
 # Add a constant to the independent variables
