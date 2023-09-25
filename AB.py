@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 import seaborn as sns
+import os
 
 # build sub directory using BASE_DIRE / sub_dir
 BASE_DIR = Path(__file__).resolve().parent
@@ -189,8 +190,28 @@ y = df['Qscore']
 # Add a constant to the independent variables
 X = sm.add_constant(X)
 
+# ... (previous code) ...
+
 # Fit the linear regression model
 model = sm.OLS(y, X).fit()
 
 # Display the regression results
 print(model.summary())
+
+# Save summary statistics to a new CSV file
+summary_stats.to_csv(BASE_DIR / 'summary_stats.csv')
+
+# Extract regression results to a DataFrame
+regression_results_df = pd.DataFrame({
+    'Coefficient': model.params,
+    'Standard Error': model.bse,
+    't-value': model.tvalues,
+    'p-value': model.pvalues
+})
+
+# Save the regression results to a new CSV file
+regression_results_df.to_csv(BASE_DIR / 'regression_results.csv')
+
+# Open the CSV files using the default application
+os.system('start excel.exe {}'.format(BASE_DIR / 'summary_stats.csv'))
+os.system('start excel.exe {}'.format(BASE_DIR / 'regression_results.csv'))
