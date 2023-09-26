@@ -142,13 +142,12 @@ plt.legend(title='Comorbidity', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.show()
 
 # Mediation analysis
-# print(help(Mediation))
 X = df[['acceptancescore']]
 M = df[['marscore']]
 Y = df[['perceptionscore']]
-# mediation_model = Mediation(data=df, treatment='marscore', outcome='acceptancescore', mediator='perceptionscore')
-# mediation_results = mediation_model.calculate(alpha=0.05, bootstrap=1000)
-# print(mediation_results)
+mediation_model = Mediation(data=df, treatment='marscore', outcome='acceptancescore', mediator='perceptionscore')
+mediation_results = mediation_model.calculate(alpha=0.05, bootstrap=1000)
+
 # Create a mediation model
 # Extract the relevant columns
 X = df['acceptancescore']
@@ -174,18 +173,17 @@ c = c_prime + a_b
 # Step 5: Calculate the mediated effect (indirect effect) as the difference between the total effect (c) and the direct effect (c')
 mediated_effect = c - c_prime
 
+mediation_results_df = pd.DataFrame(mediation_results)
+
+# Save mediation results to a CSV file
+mediation_csv_path = BASE_DIR / 'mediation_results.cv'
+mediation_results_df.to_csv(mediation_csv_path, index=False)
+
 # Display the results
 print(f"Direct Effect (c'): {c_prime}")
 print(f"Indirect Effect (a*b): {a_b}")
 print(f"Total Effect (c): {c}")
 print(f"Mediated Effect (Indirect Effect): {mediated_effect}")
-
-# For the association analysis
-X = df[['perceptionscore', 'marscore']]
-y = df['Qscore']
-
-# Add a constant to the independent variables
-X = sm.add_constant(X)
 
 # Fit the linear regression model
 model = sm.OLS(y, X).fit()
@@ -204,14 +202,18 @@ regression_results_df = pd.DataFrame({
     'p-value': model.pvalues
 })
 
+# Save comorbidity distribution to a CSV file
+comorbidity_csv_path = BASE_DIR / 'comorbidity_distribution.csv'
+comorbidity_df.to_csv(comorbidity_csv_path)
+
 # Save the regression results to a new CSV file
+regression_results_csv_path = BASE_DIR / 'regression_results.csv'
 regression_results_df.to_csv(BASE_DIR / 'regression_results.csv')
 
-# Open the CSV files using the default application
+# Save comorbidity distribution to a CSV file
+comorbidity_csv_path = BASE_DIR / 'comorbidity_distribution.csv'
+comorbidity_df.to_csv(comorbidity_csv_path)
+
 # Open the CSV files using the default application
 os.system('start excel.exe {}'.format(BASE_DIR / 'summary_stats.csv'))
-os.system('start excel.exe {}'.format(BASE_DIR / 'age_histogram_data.csv'))
-os.system('start excel.exe {}'.format(BASE_DIR / 'sex_distribution_data.csv'))
-os.system('start excel.exe {}'.format(BASE_DIR / 'mediation_results.csv'))
 os.system('start excel.exe {}'.format(BASE_DIR / 'regression_results.csv'))
-os.system('start excel.exe {}'.format(BASE_DIR / 'association_results.csv'))
