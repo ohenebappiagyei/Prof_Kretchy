@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 import seaborn as sns
 import os
-
+from tabulate import tabulate
 # build sub directory using BASE_DIRE / sub_dir
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -190,8 +190,10 @@ X = sm.add_constant(X)
 # Fit the linear regression model
 model = sm.OLS(y, X).fit()
 
-# Display the regression results
-print(model.summary())
+# Save the regression results summary to a CSV file
+regression_results_summary = model.summary()
+with open(BASE_DIR / 'regression_results_summary.txt', 'w') as f:
+    f.write(regression_results_summary.as_text())
 
 # Save summary statistics to a new CSV file
 summary_stats.to_csv(BASE_DIR / 'summary_stats.csv')
@@ -207,11 +209,97 @@ regression_results_df = pd.DataFrame({
 # Save the regression results to a new CSV file
 regression_results_df.to_csv(BASE_DIR / 'regression_results.csv')
 
-# Open the CSV files using the default application
-# Open the CSV files using the default application
-os.system('start excel.exe {}'.format(BASE_DIR / 'summary_stats.csv'))
-os.system('start excel.exe {}'.format(BASE_DIR / 'age_histogram_data.csv'))
-os.system('start excel.exe {}'.format(BASE_DIR / 'sex_distribution_data.csv'))
-os.system('start excel.exe {}'.format(BASE_DIR / 'mediation_results.csv'))
-os.system('start excel.exe {}'.format(BASE_DIR / 'regression_results.csv'))
-os.system('start excel.exe {}'.format(BASE_DIR / 'association_results.csv'))
+
+# Table 1: Demographic Statistics
+# Include sub breakdowns for certain variables
+demographics_data = {
+    'Variable': ['sex (Male)', 'sex (Female)', 'marital_status (Single)', 'marital_status (Married)',
+                 'marital_status (Divorced)', 'marital_status (Widowed)', 'level_of_education (None)',
+                 'level_of_education (Primary)', 'level_of_education (JHS)', 'level_of_education (SHS)',
+                 'level_of_education (Tertiary)', 'occupation (Unemployed)', 'occupation (Employed)',
+                 'occupation (Self-employed)', 'occupation (Other)', 'religion (Christian)', 'religion (Muslim)',
+                 'religion (Traditionalist)', 'religion (Other)'],
+    'N (Number)': [
+        df[df['sex'] == 'Male']['sex'].count(),
+        df[df['sex'] == 'Female']['sex'].count(),
+        df[df['marital_status'] == 'Single']['marital_status'].count(),
+        df[df['marital_status'] == 'Married']['marital_status'].count(),
+        df[df['marital_status'] == 'Divorced']['marital_status'].count(),
+        df[df['marital_status'] == 'Widowed']['marital_status'].count(),
+        df[df['level_of_education'] == 'None']['level_of_education'].count(),
+        df[df['level_of_education'] == 'Primary']['level_of_education'].count(),
+        df[df['level_of_education'] == 'JHS']['level_of_education'].count(),
+        df[df['level_of_education'] == 'SHS']['level_of_education'].count(),
+        df[df['level_of_education'] == 'Tertiary']['level_of_education'].count(),
+        df[df['occupation'] == 'Unemployed']['occupation'].count(),
+        df[df['occupation'] == 'Employed']['occupation'].count(),
+        df[df['occupation'] == 'Self-employed']['occupation'].count(),
+        df[df['occupation'] == 'Other']['occupation'].count(),
+        df[df['religion'] == 'Christian']['religion'].count(),
+        df[df['religion'] == 'Muslim']['religion'].count(),
+        df[df['religion'] == 'Traditionalist']['religion'].count(),
+        df[df['religion'] == 'Other']['religion'].count()
+    ]
+}
+
+# Calculate the total count for each variable
+variable_total_counts = [sum(demographics_data['N (Number)'][i:i+2]) for i in range(0, len(demographics_data['Variable']), 2)]
+
+# Calculate the percentages for each subcategory within each variable
+variable_percentages = []
+for i in range(0, len(demographics_data['Variable']), 2):
+    total_count = variable_total_counts[i // 2]
+    percentages = [(count / total_count) * 100 for count in demographics_data['N (Number)'][i:i+2]]
+    variable_percentages.extend(['{:.2f}%'.format(pct) for pct in percentages])
+
+# Update the demographics data with the correct percentage column
+demographics_data['%'] = variable_percentages
+
+## Update the percentages for each variable to ensure they add up to 100%
+for i in range(0, len(demographics_data['Variable']), 2):
+    total_count = sum(demographics_data['N (Number)'][i:i+2])
+    percentages = [(count / total_count) * 100 for count in demographics_data['N (Number)'][i:i+2]]
+    
+    # Update percentages to ensure they add up to 100%
+    total_percentage = sum(percentages)
+    adjusted_percentages = ['{:.2f}%'.format(pct / total_percentage * 100) for pct in percentages]
+    
+    # Assign adjusted percentages to respective subcategories
+    demographics_data['%'][i:i+2] = adjusted_percentages
+    
+# Display the demographic statistics table
+print("Table 1: Demographic Statistics")
+print(tabulate(demographics_data, headers='keys', tablefmt='pretty', showindex=False))
+
+# Save demographic statistics to a CSV file
+demographics_df = pd.DataFrame(demographics_data)
+demographics_df.to_csv(BASE_DIR / 'demographics_statistics.csv', index=False)
+
+# Table 2: Means, Standard Deviations, and Ranges for Qscore, Perception Scores, Acceptance Scores, and Marscore
+means_std_ranges_table = df[['Qscore', 'perceptionscore', 'acceptancescore', 'marscore']].describe()
+means_std_ranges_table.to_csv(BASE_DIR / 'means_std_ranges_table.csv')
+
+# Table 3: Correlations between Acceptance Score, Qscore, Marscore, and Perception Score
+correlation_matrix = df[['acceptancescore', 'Qscore', 'marscore', 'perceptionscore']].corr()
+correlation_matrix.to_csv(BASE_DIR / 'correlation_matrix.csv')
+
+
+# Table 5: Mediation Model Results
+mediation_results = pd.DataFrame({
+    'Measure': ['Direct Effect (c\')', 'Indirect Effect (a*b)', 'Total Effect (c)', 'Mediated Effect (Indirect Effect)'],
+    'Value': [c_prime, a_b, c, mediated_effect]
+})
+mediation_results.to_csv(BASE_DIR / 'mediation_results.csv')
+
+# Save demographic statistics to a CSV file
+demographics_df = pd.DataFrame(demographics_data)
+demographics_df.to_csv(BASE_DIR / 'demographics_statistics.csv', index=False)
+
+# Save Table 2: Means, Standard Deviations, and Ranges for Qscore, Perception Scores, Acceptance Scores, and Marscore
+means_std_ranges_table.to_csv(BASE_DIR / 'means_std_ranges_table.csv')
+
+# Save Table 3: Correlations between Acceptance Score, Qscore, Marscore, and Perception Score
+correlation_matrix.to_csv(BASE_DIR / 'correlation_matrix.csv')
+
+# Save Table 5: Mediation Model Results
+mediation_results.to_csv(BASE_DIR / 'mediation_results.csv')
