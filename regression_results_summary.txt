@@ -4,7 +4,7 @@ Dep. Variable:                 Qscore   R-squared:                       0.824
 Model:                            OLS   Adj. R-squared:                  0.823
 Method:                 Least Squares   F-statistic:                     744.5
 Date:                Tue, 26 Sep 2023   Prob (F-statistic):          1.68e-120
-Time:                        22:31:03   Log-Likelihood:                -868.98
+Time:                        22:50:20   Log-Likelihood:                -868.98
 No. Observations:                 320   AIC:                             1744.
 Df Residuals:                     317   BIC:                             1755.
 Df Model:                           2                                         
