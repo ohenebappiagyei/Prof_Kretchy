@@ -255,18 +255,16 @@ for i in range(0, len(demographics_data['Variable']), 2):
 # Update the demographics data with the correct percentage column
 demographics_data['%'] = variable_percentages
 
-## Update the percentages for each variable to ensure they add up to 100%
+# Update the percentages for each variable to ensure they add up to 100%
 for i in range(0, len(demographics_data['Variable']), 2):
     total_count = sum(demographics_data['N (Number)'][i:i+2])
     percentages = [(count / total_count) * 100 for count in demographics_data['N (Number)'][i:i+2]]
-    
+
     # Update percentages to ensure they add up to 100%
     total_percentage = sum(percentages)
     adjusted_percentages = ['{:.2f}%'.format(pct / total_percentage * 100) for pct in percentages]
-    
     # Assign adjusted percentages to respective subcategories
     demographics_data['%'][i:i+2] = adjusted_percentages
-    
 # Display the demographic statistics table
 print("Table 1: Demographic Statistics")
 print(tabulate(demographics_data, headers='keys', tablefmt='pretty', showindex=False))
@@ -303,5 +301,3 @@ correlation_matrix.to_csv(BASE_DIR / 'correlation_matrix.csv')
 
 # Save Table 5: Mediation Model Results
 mediation_results.to_csv(BASE_DIR / 'mediation_results.csv')
-
-
